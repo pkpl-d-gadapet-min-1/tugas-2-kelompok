@@ -1,46 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // ← tambah useEffect
 
 export default function Home() {
-  // State untuk Tema dan Font (Tugas Anggota 1)
   const [theme, setTheme] = useState("theme-default");
   const [font, setFont] = useState("font-sans");
+  const [user, setUser] = useState<any>(null); // ← tambah ini
 
-  // Data Kelompok
-  const members = [
-    { name: "Muhammad Hariz Albaari", npm: "2406428775", role: "UI/UX & Infrastructure" },
-    { name: "Anggota 2", npm: "2XXXXXX", role: "Auth Request (GCP)" },
-    { name: "Anggota 3", npm: "2XXXXXX", role: "Token Exchange & Session" },
-    { name: "Anggota 4", npm: "2XXXXXX", role: "Authorization & Packaging" },
-  ];
+  // ← Tambah ini: cek session saat halaman dibuka
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.loggedIn) setUser(data.user);
+      });
+  }, []);
 
   const handleGoogleLogin = () => {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
-    
     const options = {
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
       redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI as string,
-      response_type: 'code', 
-      scope: 'email',        
+      response_type: 'code',
+      scope: 'email profile', // ← tambah profile
     };
-
     const qs = new URLSearchParams(options);
-    
     window.location.assign(`${rootUrl}?${qs.toString()}`);
   };
+
+  // ← Tambah ini: fungsi logout
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setUser(null);
+  };
+
+  const members = [
+    { name: "Muhammad Hariz Albaari", npm: "2406428775", role: "UI/UX & Infrastructure" },
+    { name: "Gerry Bima Putra", npm: "2406495464", role: "Auth Request (GCP)" },
+    { name: "Fadhil Daffa Putra irawan", npm: "2406438271", role: "Token Exchange & Session" },
+    { name: "Faris Huda", npm: "2406421970", role: "Authorization & Packaging" },
+  ];
 
   return (
     <main className={`min-h-screen p-8 ${theme} ${font}`}>
       <div className="max-w-3xl mx-auto">
         
-        {/* Header */}
+        {/* Header — tidak diubah */}
         <header className="border-b pb-6 mb-8 border-current/20">
           <h1 className="text-3xl font-bold mb-2">Tugas 2: Auth & Authorization</h1>
           <p className="opacity-70">Pengantar Keamanan Perangkat Lunak - Genap 2025/2026</p>
         </header>
 
-        {/* Section Biodata (Publik) */}
+        {/* Biodata — tidak diubah */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4 underline">Biodata Kelompok</h2>
           <div className="overflow-x-auto">
@@ -65,30 +76,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section Login (Tugas Anggota 2) */}
+        {/* Section Login — tampilan sama, hanya status & tombol yang berubah */}
         <section className="p-6 border border-current/20 rounded-lg mb-8 text-center">
           <h2 className="text-lg mb-4">Akses Khusus Anggota</h2>
           
-          {/* Tombol Login Placeholder */}
           <button 
-            className="px-6 py-2 border border-current hover:bg-current hover:text-[var(--background)] transition-colors"
-            onClick={handleGoogleLogin}
+            className="px-6 py-2 border border-current hover:bg-[black] hover:text-[white] transition-colors"
+            onClick={user ? handleLogout : handleGoogleLogin} // ← toggle login/logout
           >
-            LOGIN WITH GOOGLE
+            {user ? "LOGOUT" : "LOGIN WITH GOOGLE"} {/* ← teks berubah */}
           </button>
           
           <p className="mt-4 text-xs opacity-50 italic">
-            Status: Belum Login (Placeholder)
+            {/* ← status berubah sesuai kondisi */}
+            {user ? `Status: Login sebagai ${user.email}` : "Status: Belum Login (Placeholder)"}
           </p>
         </section>
 
-        {/* Section Dashboard / Theme Switcher (Tugas Anggota 1 & 4) */}
-        {/* TODO: Anggota 4 akan memberikan logic agar section ini hanya muncul jika is_member = true */}
+        {/* Panel — tidak diubah sama sekali */}
         <section className="p-6 bg-current/5 border border-current/10 rounded-lg">
           <h2 className="text-xl font-bold mb-6">Panel Otorisasi Anggota</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Control Warna */}
             <div>
               <p className="font-semibold mb-3">Ubah Warna Background:</p>
               <div className="flex gap-3">
@@ -97,8 +106,6 @@ export default function Home() {
                 <button onClick={() => setTheme("theme-ocean")} className="px-3 py-1 border border-current text-xs">OCEAN</button>
               </div>
             </div>
-
-            {/* Control Font */}
             <div>
               <p className="font-semibold mb-3">Ubah Jenis Font:</p>
               <div className="flex gap-3">
@@ -114,7 +121,7 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Footer */}
+        {/* Footer — tidak diubah */}
         <footer className="mt-16 pt-8 border-t border-current/10 text-center text-sm opacity-50">
           <p>&copy; 2026 Kelompok Fasilkom UI. No icons used as requested.</p>
         </footer>
