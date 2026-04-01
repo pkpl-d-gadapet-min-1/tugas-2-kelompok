@@ -15,6 +15,21 @@ export default function Home() {
     { name: "Anggota 4", npm: "2XXXXXX", role: "Authorization & Packaging" },
   ];
 
+  const handleGoogleLogin = () => {
+    const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+    
+    const options = {
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
+      redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI as string,
+      response_type: 'code', 
+      scope: 'email',        
+    };
+
+    const qs = new URLSearchParams(options);
+    
+    window.location.assign(`${rootUrl}?${qs.toString()}`);
+  };
+
   return (
     <main className={`min-h-screen p-8 ${theme} ${font}`}>
       <div className="max-w-3xl mx-auto">
@@ -57,7 +72,7 @@ export default function Home() {
           {/* Tombol Login Placeholder */}
           <button 
             className="px-6 py-2 border border-current hover:bg-current hover:text-[var(--background)] transition-colors"
-            onClick={() => alert("Redirecting to Google... (Tugas Anggota 2)")}
+            onClick={handleGoogleLogin}
           >
             LOGIN WITH GOOGLE
           </button>
