@@ -1,8 +1,11 @@
 # Tugas 2 - Kelompok Authentication & Authorization
 **Matakuliah:** Pengantar Keamanan Perangkat Lunak - Genap 2025/2026   
 
-// TODO :
-List Anggota
+## List Anggota
+**Anggota 1**: Muhammad Hariz Albaari
+**Anggota 2**: Gerry Bima Putra
+**Anggota 3**: Fadhil Daffa Putra Irawan
+**Anggota 4**: Faris Huda
 
 ## Deskripsi Proyek
 Proyek ini adalah implementasi website biodata kelompok yang mendemonstrasikan mekanisme keamanan tingkat lanjut melalui protokol OAuth 2.0 (Google Provider). Fokus utama adalah pada pemisahan antara fase Autentikasi (verifikasi identitas) dan Otorisasi (pembatasan hak akses fitur berdasarkan role).
