@@ -6,9 +6,26 @@
 }
 
 /* Theme Classes */
-.theme-default { --background: #ffffff; --foreground: #171717; }
-.theme-sepia { --background: #f4ecd8; --foreground: #5b4636; }
-.theme-ocean { --background: #0f172a; --foreground: #f8fafc; }
+.theme-default {
+  --background: #ffffff;
+  --foreground: #171717;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.theme-sepia {
+  --background: #f4ecd8;
+  --foreground: #5b4636;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.theme-ocean {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  background-color: var(--background);
+  color: var(--foreground);
+}
 
 /* Font Classes */
 .font-sans { font-family: ui-sans-serif, system-ui, sans-serif; }

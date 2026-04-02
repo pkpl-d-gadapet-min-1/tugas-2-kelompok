@@ -49,11 +49,21 @@ export async function GET(request: NextRequest) {
     const userName  = payload.name;
     const userPicture = payload.picture;
 
+    // Cek apakah email ada pada whitelist
+    const whitelist = [
+      "farishudaku@gmail.com",
+      "fadhil.daffa@ui.ac.id",
+      "harizof@gmail.com",
+      "gerry.bimaputra@gmail.com"
+    ];
+    const isMember = whitelist.includes(userEmail);
+
     // ── TAHAP 3: Simpan session di HTTP-only Cookie ──
     const sessionData = JSON.stringify({
       email: userEmail,
       name:  userName,
       picture: userPicture,
+      is_member: isMember,
       loggedInAt: Date.now(),
     });
 

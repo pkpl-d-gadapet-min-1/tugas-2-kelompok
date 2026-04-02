@@ -89,7 +89,7 @@ export default function Home() {
           
           <p className="mt-4 text-xs opacity-50 italic">
             {/* ← status berubah sesuai kondisi */}
-            {user ? `Status: Login sebagai ${user.email}` : "Status: Belum Login (Placeholder)"}
+            {user ? `Status: Login sebagai ${user.email}` : "Status: Belum Login"}
           </p>
         </section>
 
@@ -101,17 +101,29 @@ export default function Home() {
             <div>
               <p className="font-semibold mb-3">Ubah Warna Background:</p>
               <div className="flex gap-3">
-                <button onClick={() => setTheme("theme-default")} className="px-3 py-1 border border-current text-xs">PUTIH</button>
-                <button onClick={() => setTheme("theme-sepia")} className="px-3 py-1 border border-current text-xs">SEPIA</button>
-                <button onClick={() => setTheme("theme-ocean")} className="px-3 py-1 border border-current text-xs">OCEAN</button>
+                <button onClick={() => setTheme("theme-default")}
+                  disabled={!user?.is_member}
+                  className="px-3 py-1 border border-current text-xs">PUTIH</button>
+                <button onClick={() => setTheme("theme-sepia")}
+                  disabled={!user?.is_member}
+                  className="px-3 py-1 border border-current text-xs">SEPIA</button>
+                <button onClick={() => setTheme("theme-ocean")}
+                 disabled={!user?.is_member}
+                 className="px-3 py-1 border border-current text-xs">OCEAN</button>
               </div>
             </div>
             <div>
               <p className="font-semibold mb-3">Ubah Jenis Font:</p>
               <div className="flex gap-3">
-                <button onClick={() => setFont("font-sans")} className="px-3 py-1 border border-current text-xs">SANS</button>
-                <button onClick={() => setFont("font-serif")} className="px-3 py-1 border border-current text-xs">SERIF</button>
-                <button onClick={() => setFont("font-mono")} className="px-3 py-1 border border-current text-xs">MONO</button>
+                <button onClick={() => setFont("font-sans")}
+                  disabled={!user?.is_member}
+                  className="px-3 py-1 border border-current text-xs">SANS</button>
+                <button onClick={() => setFont("font-serif")}
+                  disabled={!user?.is_member}
+                  className="px-3 py-1 border border-current text-xs">SERIF</button>
+                <button onClick={() => setFont("font-mono")}
+                  disabled={!user?.is_member}
+                  className="px-3 py-1 border border-current text-xs">MONO</button>
               </div>
             </div>
           </div>
