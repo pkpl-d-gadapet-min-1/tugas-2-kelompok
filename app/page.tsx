@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react"; // ← tambah useEffect
+import { useState, useEffect } from "react"; 
 
 export default function Home() {
   const [theme, setTheme] = useState("theme-default");
   const [font, setFont] = useState("font-sans");
-  const [user, setUser] = useState<any>(null); // ← tambah ini
+  const [user, setUser] = useState<any>(null); 
 
-  // ← Tambah ini: cek session saat halaman dibuka
+  // cek session saat halaman dibuka
   useEffect(() => {
     fetch("/api/auth/session")
       .then((res) => res.json())
@@ -22,13 +22,13 @@ export default function Home() {
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
       redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI as string,
       response_type: 'code',
-      scope: 'email profile', // ← tambah profile
+      scope: 'email profile', // tambah profile
     };
     const qs = new URLSearchParams(options);
     window.location.assign(`${rootUrl}?${qs.toString()}`);
   };
 
-  // ← Tambah ini: fungsi logout
+  // fungsi logout
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
@@ -45,13 +45,11 @@ export default function Home() {
     <main className={`min-h-screen p-8 ${theme} ${font}`}>
       <div className="max-w-3xl mx-auto">
         
-        {/* Header — tidak diubah */}
         <header className="border-b pb-6 mb-8 border-current/20">
           <h1 className="text-3xl font-bold mb-2">Tugas 2: Auth & Authorization</h1>
           <p className="opacity-70">Pengantar Keamanan Perangkat Lunak - Genap 2025/2026</p>
         </header>
 
-        {/* Biodata — tidak diubah */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold mb-4 underline">Biodata Kelompok</h2>
           <div className="overflow-x-auto">
@@ -76,24 +74,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section Login — tampilan sama, hanya status & tombol yang berubah */}
         <section className="p-6 border border-current/20 rounded-lg mb-8 text-center">
           <h2 className="text-lg mb-4">Akses Khusus Anggota</h2>
           
           <button 
             className="px-6 py-2 border border-current hover:bg-[black] hover:text-[white] transition-colors"
-            onClick={user ? handleLogout : handleGoogleLogin} // ← toggle login/logout
+            onClick={user ? handleLogout : handleGoogleLogin} 
           >
-            {user ? "LOGOUT" : "LOGIN WITH GOOGLE"} {/* ← teks berubah */}
+            {user ? "LOGOUT" : "LOGIN WITH GOOGLE"} 
           </button>
           
           <p className="mt-4 text-xs opacity-50 italic">
-            {/* ← status berubah sesuai kondisi */}
             {user ? `Status: Login sebagai ${user.email}` : "Status: Belum Login"}
           </p>
         </section>
 
-        {/* Panel — tidak diubah sama sekali */}
         <section className="p-6 bg-current/5 border border-current/10 rounded-lg">
           <h2 className="text-xl font-bold mb-6">Panel Otorisasi Anggota</h2>
           

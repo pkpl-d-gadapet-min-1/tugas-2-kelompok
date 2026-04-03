@@ -16,15 +16,15 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // ── TAHAP 1: Tukar Authorization Code → Access Token + ID Token ──
+    // Tukar Authorization Code = Access Token + ID Token 
     const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
     code,
-    client_id:     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,    // ← ganti ini
-    client_secret: process.env.GOOGLE_CLIENT_SECRET!,            // ← ini sudah benar
-    redirect_uri:  process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!, // ← ganti ini
+    client_id:     process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,    
+    client_secret: process.env.GOOGLE_CLIENT_SECRET!,            
+    redirect_uri:  process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!, 
     grant_type:    "authorization_code",
     }),
     });
@@ -39,7 +39,6 @@ export async function GET(request: NextRequest) {
     // tokenData berisi: access_token, id_token (JWT), expires_in, dll
     const { id_token, access_token } = tokenData;
 
-    // ── TAHAP 2: Decode ID Token untuk ambil info user ──
     // ID Token adalah JWT → payload ada di bagian tengah (base64)
     const payload = JSON.parse(
       Buffer.from(id_token.split(".")[1], "base64url").toString()
@@ -58,7 +57,7 @@ export async function GET(request: NextRequest) {
     ];
     const isMember = whitelist.includes(userEmail);
 
-    // ── TAHAP 3: Simpan session di HTTP-only Cookie ──
+    // Simpan session di HTTP-only Cookie ──
     const sessionData = JSON.stringify({
       email: userEmail,
       name:  userName,
@@ -69,9 +68,9 @@ export async function GET(request: NextRequest) {
 
     const response = NextResponse.redirect(new URL("/", request.url));
 
-    // Set cookie: HTTP-only = tidak bisa diakses JS di browser (aman!)
+    // Set cookie: HTTP-only = tidak bisa diakses JS di browser
     response.cookies.set("session", sessionData, {
-      httpOnly: true,                       // ← Proteksi utama dari XSS
+      httpOnly: true,                       // Proteksi utama dari XSS
       secure: process.env.NODE_ENV === "production", // HTTPS only di production
       sameSite: "lax",                      // Proteksi CSRF
       maxAge: 60 * 60 * 24,                 // 1 hari (dalam detik)
